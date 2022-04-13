@@ -2,13 +2,12 @@
 #define LBM_PHYS_H
 
 /********************  HEADERS  *********************/
-#include "lbm_struct.h"
 #include "lbm_comm.h"
 
 /********************** CONSTS **********************/
-const int opposite_of[DIRECTIONS];
-const double equil_weight[DIRECTIONS];
-const Vector direction_matrix[DIRECTIONS];
+extern const int opposite_of[DIRECTIONS];
+extern const double equil_weight[DIRECTIONS];
+extern const Vector direction_matrix[DIRECTIONS];
 
 /*******************  FUNCTION  *********************/
 //helper

@@ -3,7 +3,6 @@
 
 /********************  HEADERS  *********************/
 #include <mpi.h>
-#include <stdlib.h>
 #include "lbm_struct.h"
 
 /*******************  DEFINITIONS  ******************/

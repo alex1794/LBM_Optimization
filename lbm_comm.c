@@ -1,10 +1,4 @@
 /********************  HEADERS  *********************/
-#include <assert.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include "lbm_comm.h"
 
 /*******************  FUNCTION  *********************/

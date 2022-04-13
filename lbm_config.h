@@ -1,6 +1,16 @@
 #ifndef LBM_CONFIG_H
 #define LBM_CONFIG_H
 
+/********************  HEADERS  *********************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <assert.h>
+#include <math.h>
+#include <unistd.h>
+#include <stdbool.h>
+
 /********************  DEFINITIONS  *********************/
 
 #define concat(a,b,c,d,e) a##b##c##d##e

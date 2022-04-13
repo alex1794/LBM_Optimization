@@ -1,16 +1,5 @@
 /********************  HEADERS  *********************/
-#include <mpi.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <stdbool.h>
-#include <math.h>
-#include <stdint.h>
-#include "lbm_config.h"
-#include "lbm_struct.h"
-#include "lbm_phys.h"
 #include "lbm_init.h"
-#include "lbm_comm.h"
 
 /*******************  FUNCTION  *********************/
 /**

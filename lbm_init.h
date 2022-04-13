@@ -2,8 +2,7 @@
 #define LBM_INIT_H
 
 /********************  HEADERS  *********************/
-#include "lbm_struct.h"
-#include "lbm_comm.h"
+#include "lbm_phys.h"
 
 /*******************  FUNCTION  *********************/
 void init_cond_velocity_0_density_1(Mesh * mesh);

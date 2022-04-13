@@ -1,10 +1,6 @@
 /********************  HEADERS  *********************/
-#include <assert.h>
-#include <stdlib.h>
-#include "lbm_config.h"
-#include "lbm_struct.h"
 #include "lbm_phys.h"
-#include "lbm_comm.h"
+
 
 /********************** CONSTS **********************/
 /**

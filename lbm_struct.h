@@ -2,8 +2,6 @@
 #define LBM_STRUCT_H
 
 /********************  HEADERS  *********************/
-#include <stdint.h>
-#include <stdio.h>
 #include "lbm_config.h"
 
 /********************** TYPEDEF *********************/

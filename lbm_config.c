@@ -1,7 +1,4 @@
 /********************  HEADERS  *********************/
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "lbm_config.h"
 
 /****************  GLOBAL VARS ****************/

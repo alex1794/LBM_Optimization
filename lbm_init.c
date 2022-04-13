@@ -1,7 +1,4 @@
 /********************  HEADERS  *********************/
-#include <mpi.h>
-#include <assert.h>
-#include "lbm_phys.h"
 #include "lbm_init.h"
 
 /*******************  FUNCTION  *********************/
