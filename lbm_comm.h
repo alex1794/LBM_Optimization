@@ -56,27 +56,27 @@ typedef struct lbm_comm_t_s
 } lbm_comm_t;
 
 /*******************  FUNCTION  *********************/
-static inline int lbm_comm_width( lbm_comm_t *mc )
+static inline int lbm_comm_width(lbm_comm_t *mc)
 {
 	return mc->width;
 }
 
 /*******************  FUNCTION  *********************/
-static inline int lbm_comm_height( lbm_comm_t *mc )
+static inline int lbm_comm_height(lbm_comm_t *mc)
 {
 	return mc->height;
 }
 
 /*******************  FUNCTION  *********************/
-void lbm_comm_init( lbm_comm_t * mesh, int rank, int comm_size, int width, int height );
-void lbm_comm_release( lbm_comm_t * mesh );
-void  lbm_comm_print( lbm_comm_t *mesh );
+void lbm_comm_print(lbm_comm_t *mesh);
+void lbm_comm_init(lbm_comm_t *mesh, int rank, int comm_size, int width, int height);
+void lbm_comm_release(lbm_comm_t *mesh);
 
 /*******************  FUNCTION  *********************/
-void lbm_comm_sync_ghosts_wait( lbm_comm_t * mesh );
-void lbm_comm_ghost_exchange(lbm_comm_t * mesh, Mesh *mesh_to_process );
+void lbm_comm_sync_ghosts_wait(lbm_comm_t *mesh);
+void lbm_comm_ghost_exchange(lbm_comm_t *mesh, Mesh *mesh_to_process);
 
 /*******************  FUNCTION  *********************/
-void save_frame_all_domain( FILE * fp, Mesh *source_mesh, Mesh *temp );
+void save_frame_all_domain(FILE *fp, Mesh *source_mesh, Mesh *temp);
 
 #endif

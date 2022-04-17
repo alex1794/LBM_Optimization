@@ -43,10 +43,9 @@ void update_derived_parameter(void)
 /**
  * Chargement de la config depuis le fichier.
 **/
-void load_config(const char * filename)
+void load_config(const char *filename)
 {
 	//vars
-	FILE * fp;
 	char buffer[1024];
 	char buffer2[1024];
 	int intValue;
@@ -54,8 +53,8 @@ void load_config(const char * filename)
 	int line = 0;
 
 	//open the config file
-	fp = fopen(filename,"r");
-	if (fp == NULL)
+	FILE *fp = fopen(filename,"r");
+	if(fp == NULL)
 	{
 		perror(filename);
 		abort();
@@ -65,55 +64,61 @@ void load_config(const char * filename)
 	setup_default_values();
 
 	//loop on lines
-	while (fgets(buffer,1024,fp) != NULL)
+	while(fgets(buffer,1024,fp) != NULL)
 	{
 		line++;
-		if (buffer[0] == '#')
+		if(buffer[0] == '#')
 		{
 			//comment, nothing to do
-		} else if (sscanf(buffer,"iterations = %d\n",&intValue) == 1) {
-			 lbm_gbl_config.iterations = intValue;
-		} else if (sscanf(buffer,"width = %d\n",&intValue) == 1) {
-			 lbm_gbl_config.width = intValue;
-			 if (lbm_gbl_config.obstacle_x == 0.0)
+		}
+		else if(sscanf(buffer,"iterations = %d\n",&intValue) == 1)
+			lbm_gbl_config.iterations = intValue;
+		else if(sscanf(buffer,"width = %d\n",&intValue) == 1)
+		{
+			lbm_gbl_config.width = intValue;
+			if(lbm_gbl_config.obstacle_x == 0.0)
 				lbm_gbl_config.obstacle_x = (lbm_gbl_config.width / 5.0 + 1.0);
-		} else if (sscanf(buffer,"height = %d\n",&intValue) == 1) {
+		}
+		else if(sscanf(buffer,"height = %d\n",&intValue) == 1)
+		{
 			lbm_gbl_config.height = intValue;
-			if (lbm_gbl_config.obstacle_r == 0.0)
+			if(lbm_gbl_config.obstacle_r == 0.0)
 				lbm_gbl_config.obstacle_r = (lbm_gbl_config.height / 10.0 + 1.0);
-			if (lbm_gbl_config.obstacle_y == 0.0)
+			if(lbm_gbl_config.obstacle_y == 0.0)
 				lbm_gbl_config.obstacle_y = (lbm_gbl_config.height / 2.0 + 3.0);
-		} else if (sscanf(buffer,"obstacle_r = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.obstacle_r = doubleValue;
-		} else if (sscanf(buffer,"obstacle_x = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.obstacle_x = doubleValue;
-		} else if (sscanf(buffer,"obstacle_y = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.obstacle_y = doubleValue;
-		} else if (sscanf(buffer,"inflow_max_velocity = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.inflow_max_velocity = doubleValue;
-		} else if (sscanf(buffer,"reynolds = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.reynolds = doubleValue;
-		} else if (sscanf(buffer,"kinetic_viscosity = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.kinetic_viscosity = doubleValue;
-		} else if (sscanf(buffer,"relax_parameter = %lf\n",&doubleValue) == 1) {
-			 lbm_gbl_config.relax_parameter = doubleValue;
-		} else if (sscanf(buffer,"write_interval = %d\n",&intValue) == 1) {
-			 lbm_gbl_config.write_interval = intValue;
-		} else if (sscanf(buffer,"output_filename = %s\n",buffer2) == 1) {
-			 lbm_gbl_config.output_filename = strdup(buffer2);
-		} else {
+		}
+		else if(sscanf(buffer,"obstacle_r = %lf\n",&doubleValue) == 1)
+			lbm_gbl_config.obstacle_r = doubleValue;
+		else if(sscanf(buffer,"obstacle_x = %lf\n",&doubleValue) == 1)
+			lbm_gbl_config.obstacle_x = doubleValue;
+		else if(sscanf(buffer,"obstacle_y = %lf\n",&doubleValue) == 1) 
+			lbm_gbl_config.obstacle_y = doubleValue;
+		else if(sscanf(buffer,"inflow_max_velocity = %lf\n",&doubleValue) == 1) 
+			lbm_gbl_config.inflow_max_velocity = doubleValue;
+		else if(sscanf(buffer,"reynolds = %lf\n",&doubleValue) == 1) 
+			lbm_gbl_config.reynolds = doubleValue;
+		else if(sscanf(buffer,"kinetic_viscosity = %lf\n",&doubleValue) == 1) 
+			lbm_gbl_config.kinetic_viscosity = doubleValue;
+		else if(sscanf(buffer,"relax_parameter = %lf\n",&doubleValue) == 1) 
+			lbm_gbl_config.relax_parameter = doubleValue;
+		else if(sscanf(buffer,"write_interval = %d\n",&intValue) == 1) 
+			lbm_gbl_config.write_interval = intValue;
+		else if(sscanf(buffer,"output_filename = %s\n",buffer2) == 1) 
+			lbm_gbl_config.output_filename = strdup(buffer2);
+		else
+		{
 			fprintf(stderr,"Invalid config option line %d : %s\n",line,buffer);
 			abort();
 		}
 	}
 
-	//check error
-	if (!feof(fp))
-	{
-		perror(filename);
-		abort();
-	}
-
+	// //check error
+	// if(!feof(fp))
+	// {
+	// 	perror(filename);
+	// 	abort();
+	// }
+	fclose(fp);
 	update_derived_parameter();
 }
 
@@ -134,23 +139,22 @@ void print_config(void)
 {
 	printf("=================== CONFIG ===================\n");
 	//discretisation
-	printf("%-20s = %d\n","iterations",lbm_gbl_config.iterations);
-	printf("%-20s = %d\n","width",lbm_gbl_config.width);
-	printf("%-20s = %d\n","height",lbm_gbl_config.height);
+	printf("%-20s = %d\n", "iterations", lbm_gbl_config.iterations);
+	printf("%-20s = %d\n", "width", lbm_gbl_config.width);
+	printf("%-20s = %d\n", "height", lbm_gbl_config.height);
 	//obstacle
-	printf("%-20s = %lf\n","obstacle_r",lbm_gbl_config.obstacle_r);
-	printf("%-20s = %lf\n","obstacle_x",lbm_gbl_config.obstacle_x);
-	printf("%-20s = %lf\n","obstacle_y",lbm_gbl_config.obstacle_y);
+	printf("%-20s = %lf\n", "obstacle_r", lbm_gbl_config.obstacle_r);
+	printf("%-20s = %lf\n", "obstacle_x", lbm_gbl_config.obstacle_x);
+	printf("%-20s = %lf\n", "obstacle_y", lbm_gbl_config.obstacle_y);
 	//flow parameters
-	printf("%-20s = %lf\n","reynolds",lbm_gbl_config.reynolds);
-	printf("%-20s = %lf\n","reynolds",lbm_gbl_config.reynolds);
-	printf("%-20s = %lf\n","inflow_max_velocity",lbm_gbl_config.inflow_max_velocity);
+	printf("%-20s = %lf\n", "reynolds", lbm_gbl_config.reynolds);
+	printf("%-20s = %lf\n", "inflow_max_velocity", lbm_gbl_config.inflow_max_velocity);
 	//results
-	printf("%-20s = %s\n","output_filename",lbm_gbl_config.output_filename);
-	printf("%-20s = %d\n","write_interval",lbm_gbl_config.write_interval);
+	printf("%-20s = %s\n", "output_filename", lbm_gbl_config.output_filename);
+	printf("%-20s = %d\n", "write_interval", lbm_gbl_config.write_interval);
 	printf("------------ Derived parameters --------------\n");
-	printf("%-20s = %lf\n","kinetic_viscosity",lbm_gbl_config.kinetic_viscosity);
-	printf("%-20s = %lf\n","relax_parameter",lbm_gbl_config.relax_parameter);
+	printf("%-20s = %lf\n", "kinetic_viscosity", lbm_gbl_config.kinetic_viscosity);
+	printf("%-20s = %lf\n", "relax_parameter", lbm_gbl_config.relax_parameter);
 	printf("==============================================\n");
 	
 }

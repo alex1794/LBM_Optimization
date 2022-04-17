@@ -9,7 +9,7 @@
  * Une cellule est un tableau de DIRECTIONS doubles pour stoquer les
  * probabilités microscopiques (f_i).
 **/
-typedef double * lbm_mesh_cell_t;
+typedef double* lbm_mesh_cell_t;
 /** Représentation d'un vecteur pour la manipulation des vitesses macroscopiques. **/
 typedef double Vector[DIMENSIONS];
 
@@ -52,7 +52,7 @@ typedef enum lbm_cell_type_e
 typedef struct lbm_mesh_type_s
 {
 	/** Type des cellules du maillages (MESH_WIDTH * MESH_HEIGHT). **/
-	lbm_cell_type_t * types;
+	lbm_cell_type_t *types;
 	/** Largeur du maillage local (mailles fantome comprises). **/
 	int width;
 	/** Largeur du maillage local (mailles fantome comprises). **/
@@ -85,52 +85,52 @@ typedef struct lbm_file_entry_s
 /** Pour la lecture du fichier de sortie. **/
 typedef struct lbm_data_file_s
 {
-	FILE * fp;
+	FILE *fp;
 	lbm_file_header_t header;
-	lbm_file_entry_t * entries;
+	lbm_file_entry_t *entries;
 } lbm_data_file_t;
 
 
 /*******************  FUNCTION  *********************/
-void Mesh_init( Mesh * mesh, int width,  int height );
-void Mesh_release( Mesh * mesh );
+void Mesh_init(Mesh *mesh, int width, int height);
+void Mesh_release(Mesh *mesh);
 
 /*******************  FUNCTION  *********************/
-void lbm_mesh_type_t_init( lbm_mesh_type_t * mesh, int width,  int height );
-void lbm_mesh_type_t_release( lbm_mesh_type_t * mesh );
+void lbm_mesh_type_t_init(lbm_mesh_type_t *mesh, int width, int height);
+void lbm_mesh_type_t_release(lbm_mesh_type_t *mesh);
 
 /*******************  FUNCTION  *********************/
-void save_frame(FILE * fp,const Mesh * mesh);
+void save_frame(FILE *fp,const Mesh *mesh);
 
 /*******************  FUNCTION  *********************/
-void fatal(const char * message);
+void fatal(const char *message);
 
 /*******************  FUNCTION  *********************/
 /**
  * Fonction à utiliser pour récupérer une cellule du maillage en fonction de ses coordonnées.
 **/
-static inline lbm_mesh_cell_t Mesh_get_cell( const Mesh *mesh, int x, int y)
+static inline lbm_mesh_cell_t Mesh_get_cell(const Mesh *mesh, int x, int y)
 {
-	return &mesh->cells[ (x * mesh->height + y) * DIRECTIONS ];
+	return &mesh->cells[(x * mesh->height + y) * DIRECTIONS];
 }
 
 /*******************  FUNCTION  *********************/
 /**
  * Fonction à utiliser pour récupérer une colonne (suivant y, x fixé) du maillage en fonction de ses coordonnées.
 **/
-static inline lbm_mesh_cell_t Mesh_get_col( const Mesh * mesh, int x )
+static inline lbm_mesh_cell_t Mesh_get_col(const Mesh *mesh, int x)
 {
 	//+DIRECTIONS to skip the first (ghost) line
-	return &mesh->cells[ x * mesh->height * DIRECTIONS + DIRECTIONS];
+	return &mesh->cells[x * mesh->height * DIRECTIONS + DIRECTIONS];
 }
 
 /*******************  FUNCTION  *********************/
 /**
  * Fonction à utiliser pour récupérer un pointeur sur le type d'une cellule du maillage en fonction de ses coordonnées.
 **/
-static inline lbm_cell_type_t * lbm_cell_type_t_get_cell( const lbm_mesh_type_t * meshtype, int x, int y)
+static inline lbm_cell_type_t *lbm_cell_type_t_get_cell(const lbm_mesh_type_t *meshtype, int x, int y)
 {
-	return &meshtype->types[ x * meshtype->height + y];
+	return &meshtype->types[x * meshtype->height + y];
 }
 
 #endif //LBM_STRUCT_H

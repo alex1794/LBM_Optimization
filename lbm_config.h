@@ -62,16 +62,16 @@ typedef struct lbm_config_s
 	double kinetic_viscosity;
 	double relax_parameter;
 	//results
-	const char * output_filename;
+	const char *output_filename;
 	int write_interval;
 } lbm_config_t;
 
 /*****************  FUNCTIONS  *******************/
-void load_config(const char * filename);
+void setup_default_values(void);
 void update_derived_parameter(void);
+void load_config(const char *filename);
 void config_cleanup(void);
 void print_config(void);
-void setup_default_values(void);
 
 /****************  EXTERNAL VARS ****************/
 /**

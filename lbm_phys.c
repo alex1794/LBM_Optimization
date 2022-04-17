@@ -27,7 +27,7 @@ const double equil_weight[DIRECTIONS] = {
 	1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0
 };
 //opposite directions, for bounce back implementation
-const int opposite_of[DIRECTIONS] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
+const int opposite_of[DIRECTIONS] = {0, 3, 4, 1, 2, 7, 8, 5, 6};
 #else
 #error Need to defined adapted equibirium distribution function
 #endif
@@ -36,14 +36,13 @@ const int opposite_of[DIRECTIONS] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
 /**
  * Renvoie le résultat du produit des deux vecteurs passés en paramêtre.
 **/
-double get_vect_norme_2(const Vector vect1,const Vector vect2)
+double get_vect_norme_2(const Vector vect1, const Vector vect2)
 {
 	//vars
-	int k;
 	double res = 0.0;
 
 	//loop on dimensions
-	for ( k = 0 ; k < DIMENSIONS ; k++)
+	for(int k = 0; k < DIMENSIONS; ++k)
 		res += vect1[k] * vect2[k];
 
 	return res;
@@ -57,14 +56,13 @@ double get_vect_norme_2(const Vector vect1,const Vector vect2)
 double get_cell_density(const lbm_mesh_cell_t cell)
 {
 	//vars
-	int k;
 	double res = 0.0;
 
 	//errors
-	assert( cell != NULL );
+	assert(cell != NULL);
 
 	//loop on directions
-	for( k = 0 ; k < DIRECTIONS ; k++)
+	for(int k = 0; k < DIRECTIONS; ++k)
 		res += cell[k];
 
 	//return res
@@ -77,23 +75,20 @@ double get_cell_density(const lbm_mesh_cell_t cell)
  * densités microscopiques.
  * @param cell_density Densité macroscopique de la cellules.
 **/
-void get_cell_velocity(Vector v,const lbm_mesh_cell_t cell,double cell_density)
+void get_cell_velocity(Vector v, const lbm_mesh_cell_t cell, double cell_density)
 {
-	//vars
-	int k,d;
-
 	//errors
 	assert(v != NULL);
 	assert(cell != NULL);
 
 	//loop on all dimensions
-	for ( d = 0 ; d < DIMENSIONS ; d++)
+	for(int d = 0; d < DIMENSIONS; ++d)
 	{
 		//reset value
 		v[d] = 0.0;
 
 		//sum all directions
-		for ( k = 0 ; k < DIRECTIONS ; k++)
+		for(int k = 0; k < DIRECTIONS; ++k)
 			v[d] += cell[k] * direction_matrix[k][d];
 
 		//normalize
@@ -109,7 +104,7 @@ void get_cell_velocity(Vector v,const lbm_mesh_cell_t cell,double cell_density)
  * @param density Densité macroscopique du fluide sur la maille.
  * @param direction Direction pour laquelle calculer l'état d'équilibre.
 **/
-double compute_equilibrium_profile(Vector velocity,double density,int direction)
+double compute_equilibrium_profile(Vector velocity, double density, int direction)
 {
 	//vars
 	double v2;
@@ -118,17 +113,14 @@ double compute_equilibrium_profile(Vector velocity,double density,int direction)
 	double feq;
 
 	//velocity norme 2 (v * v)
-	v2 = get_vect_norme_2(velocity,velocity);
+	v2 = get_vect_norme_2(velocity, velocity);
 
 	//calc e_i * v_i / c
-	p = get_vect_norme_2(direction_matrix[direction],velocity);
+	p = get_vect_norme_2(direction_matrix[direction], velocity);
 	p2 = p * p;
 
 	//terms without density and direction weight
-	feq = 1.0
-		+ (3.0 * p)
-		+ ((9.0 / 2.0) * p2)
-		- ((3.0 / 2.0) * v2);
+	feq = 1.0 + (3.0 * p) + ((9.0 / 2.0) * p2) - ((3.0 / 2.0) * v2);
 
 	//mult all by density and direction weight
 	feq *= equil_weight[direction] * density;
@@ -140,23 +132,22 @@ double compute_equilibrium_profile(Vector velocity,double density,int direction)
 /**
  * Calcule le vecteur de collision entre les fluides de chacune des directions.
 **/
-void compute_cell_collision(lbm_mesh_cell_t cell_out,const lbm_mesh_cell_t cell_in)
+void compute_cell_collision(lbm_mesh_cell_t cell_out, const lbm_mesh_cell_t cell_in)
 {
 	//vars
-	int k;
 	double density;
-	Vector v;
 	double feq;
+	Vector v;
 
 	//compute macroscopic values
 	density = get_cell_density(cell_in);
-	get_cell_velocity(v,cell_in,density);
+	get_cell_velocity(v, cell_in, density);
 
 	//loop on microscopic directions
-	for( k = 0 ; k < DIRECTIONS ; k++)
+	for(int k = 0; k < DIRECTIONS; ++k)
 	{
 		//compute f at equilibr.
-		feq = compute_equilibrium_profile(v,density,k);
+		feq = compute_equilibrium_profile(v, density, k);
 		//compute fout
 		cell_out[k] = cell_in[k] - RELAX_PARAMETER * (cell_in[k] - feq);
 	}
@@ -169,15 +160,14 @@ void compute_cell_collision(lbm_mesh_cell_t cell_out,const lbm_mesh_cell_t cell_
 void compute_bounce_back(lbm_mesh_cell_t cell)
 {
 	//vars
-	int k;
 	double tmp[DIRECTIONS];
 
 	//compute bounce back
-	for ( k = 0 ; k < DIRECTIONS ; k++)
+	for (int k = 0; k < DIRECTIONS; ++k)
 		tmp[k] = cell[opposite_of[k]];
 
 	//compute bounce back
-	for ( k = 0 ; k < DIRECTIONS ; k++)
+	for (int k = 0; k < DIRECTIONS; ++k)
 		cell[k] = tmp[k];
 }
 
@@ -187,7 +177,7 @@ void compute_bounce_back(lbm_mesh_cell_t cell)
  * @param i Position pour laquelle on cherche la vitesse.
  * @param size diamètre du tube.
 **/
-double helper_compute_poiseuille(int i,int size)
+double helper_compute_poiseuille(int i, int size)
 {
 	double y = (double)(i - 1);
 	double L = (double)(size - 1);
@@ -202,7 +192,7 @@ double helper_compute_poiseuille(int i,int size)
  * @param cell Maille à mettre à jour.
  * @param id_y Position en y de la cellule pour savoir comment calculer la vitesse de poiseuille.
 **/
-void compute_inflow_zou_he_poiseuille_distr( const Mesh *mesh, lbm_mesh_cell_t cell,int id_y)
+void compute_inflow_zou_he_poiseuille_distr(const Mesh *mesh, lbm_mesh_cell_t cell, int id_y)
 {
 	//vars
 	double v;
@@ -216,7 +206,7 @@ void compute_inflow_zou_he_poiseuille_distr( const Mesh *mesh, lbm_mesh_cell_t c
 	//set macroscopic fluide info
 	//poiseuille distr on X and null on Y
 	//we just want the norm, so v = v_x
-	v = helper_compute_poiseuille(id_y,mesh->height);
+	v = helper_compute_poiseuille(id_y, mesh->height);
 
 	//compute rho from u and inner flow on surface
 	density = (cell[0] + cell[2] + cell[4] + 2 * ( cell[3] + cell[6] + cell[7] )) / (1.0 - v) ;
@@ -270,17 +260,14 @@ void compute_outflow_zou_he_const_density(lbm_mesh_cell_t cell)
 /**
  * Applique les actions spéciales liées aux conditions de bords ou aux réflexions sur l'obstacle.
 **/
-void special_cells(Mesh * mesh, lbm_mesh_type_t * mesh_type, const lbm_comm_t * mesh_comm)
+void special_cells(Mesh *mesh, lbm_mesh_type_t *mesh_type, const lbm_comm_t *mesh_comm)
 {
-	//vars
-	int i,j;
-
 	//loop on all inner cells
-	for( i = 1 ; i < mesh->width - 1 ; i++ )
+	for(int i = 1; i < mesh->width-1; ++i)
 	{
-		for( j = 1 ; j < mesh->height - 1 ; j++)
+		for(int j = 1; j < mesh->height-1; ++j)
 		{
-			switch (*( lbm_cell_type_t_get_cell( mesh_type , i, j) ))
+			switch(*(lbm_cell_type_t_get_cell(mesh_type, i, j)))
 			{
 				case CELL_FUILD:
 					break;
@@ -288,7 +275,7 @@ void special_cells(Mesh * mesh, lbm_mesh_type_t * mesh_type, const lbm_comm_t * 
 					compute_bounce_back(Mesh_get_cell(mesh, i, j));
 					break;
 				case CELL_LEFT_IN:
-					compute_inflow_zou_he_poiseuille_distr(mesh, Mesh_get_cell(mesh, i, j) ,j + mesh_comm->y);
+					compute_inflow_zou_he_poiseuille_distr(mesh, Mesh_get_cell(mesh, i, j), j + mesh_comm->y);
 					break;
 				case CELL_RIGHT_OUT:
 					compute_outflow_zou_he_const_density(Mesh_get_cell(mesh, i, j));
@@ -303,19 +290,16 @@ void special_cells(Mesh * mesh, lbm_mesh_type_t * mesh_type, const lbm_comm_t * 
  * Calcule les collisions sur chacune des cellules.
  * @param mesh Maillage sur lequel appliquer le calcul.
 **/
-void collision(Mesh * mesh_out,const Mesh * mesh_in)
+void collision(Mesh *mesh_out, const Mesh *mesh_in)
 {
-	//vars
-	int i,j;
-
 	//errors
 	assert(mesh_in->width == mesh_out->width);
 	assert(mesh_in->height == mesh_out->height);
 
 	//loop on all inner cells
-	for( j = 1 ; j < mesh_in->height - 1 ; j++)
-		for( i = 1 ; i < mesh_in->width - 1 ; i++ )
-			compute_cell_collision(Mesh_get_cell(mesh_out, i, j),Mesh_get_cell(mesh_in, i, j));
+	for(int j = 1; j < mesh_in->height-1; ++j)
+		for(int i = 1; i < mesh_in->width-1; ++i)
+			compute_cell_collision(Mesh_get_cell(mesh_out, i, j), Mesh_get_cell(mesh_in, i, j));
 }
 
 /*******************  FUNCTION  *********************/
@@ -324,25 +308,24 @@ void collision(Mesh * mesh_out,const Mesh * mesh_in)
  * @param mesh_out Maillage de sortie.
  * @param mesh_in Maillage d'entrée (ne doivent pas être les mêmes).
 **/
-void propagation(Mesh * mesh_out,const Mesh * mesh_in)
+void propagation(Mesh *mesh_out, const Mesh *mesh_in)
 {
 	//vars
-	int i,j,k;
 	int ii,jj;
 
 	//loop on all cells
-	for ( j = 0 ; j < mesh_out->height ; j++)
+	for(int j = 0; j < mesh_out->height; ++j)
 	{
-		for ( i = 0 ; i < mesh_out->width; i++)
+		for(int i = 0; i < mesh_out->width; ++i)
 		{
 			//for all direction
-			for ( k  = 0 ; k < DIRECTIONS ; k++)
+			for(int k = 0; k < DIRECTIONS; ++k)
 			{
 				//compute destination point
 				ii = (i + direction_matrix[k][0]);
 				jj = (j + direction_matrix[k][1]);
 				//propagate to neighboor nodes
-				if ((ii >= 0 && ii < mesh_out->width) && (jj >= 0 && jj < mesh_out->height))
+				if((ii >= 0 && ii < mesh_out->width) && (jj >= 0 && jj < mesh_out->height))
 					Mesh_get_cell(mesh_out, ii, jj)[k] = Mesh_get_cell(mesh_in, i, j)[k];
 			}
 		}
