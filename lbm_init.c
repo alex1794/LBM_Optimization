@@ -75,8 +75,10 @@ void setup_init_state_global_poiseuille_profile(Mesh *mesh, lbm_mesh_type_t *mes
 				//mark as standard fluid
 				*(lbm_cell_type_t_get_cell(mesh_type, i, j)) = CELL_FUILD;
 				//this is a try to init the fluide with null speed except on left interface.
-				//if (i > 1)
-				//	Mesh_get_cell(mesh, i, j)[k] = equil_weight[k];
+#ifdef NOSPEED
+				if (i > 1)
+					Mesh_get_cell(mesh, i, j)[k] = equil_weight[k];
+#endif
 			}
 		}
 	}

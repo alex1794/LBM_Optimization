@@ -313,7 +313,7 @@ void lbm_comm_ghost_exchange(lbm_comm_t *mesh, Mesh *mesh_to_process)
 	lbm_comm_sync_ghosts_horizontal(mesh, mesh_to_process, COMM_RECV, mesh->right_id, mesh->width - 1);
 	
 	//wait for IO to finish, VERY important, do not remove.
-	FLUSH_INOUT();
+	//FLUSH_INOUT();
 }
 
 /*******************  FUNCTION  *********************/
